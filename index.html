@@ -29,17 +29,17 @@ html, body {
   margin:24px auto;
   padding:12px;
 }
+.wrap > h1 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: clamp(22px, 3vw, 32px);
+}
 .main-board {
   display: grid;
   grid-template-columns: 350px 1fr;
   gap: 20px;
   align-items: start;
-}
-#game-column h1 {
-  text-align: center;
-  margin-top: 0;
-  margin-bottom: 20px;
-  font-size:clamp(24px, 4vw, 38px);
 }
 .card {
   background:linear-gradient(180deg, var(--panel), var(--panel2));
@@ -57,13 +57,18 @@ html, body {
   line-height: 1.6;
   font-size: 15px;
 }
+.description-card hr {
+    border: none;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 24px 0;
+}
 .controls {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-  margin-bottom: 20px;
 }
 .btn {
   background:linear-gradient(180deg, #273074, #1a1f55);
@@ -156,6 +161,7 @@ select {
 <body>
 
 <div class="wrap">
+  <h1>Hanoi Kulesi Algoritma Oyunu</h1>
   <div class="main-board">
     <section class="card description-card">
       <h2>Açıklama & Kurallar</h2>
@@ -168,11 +174,10 @@ select {
         <li style="color: var(--muted); line-height: 1.6;">Büyük bir disk, asla daha küçük bir diskin üzerine konulamaz.</li>
         <li style="color: var(--muted); line-height: 1.6;">Diskleri taşımak için ortadaki yardımcı kuleyi kullanabilirsiniz.</li>
       </ol>
-    </section>
+      
+      <hr>
 
-    <div id="game-column">
-      <h1>Hanoi Kulesi Algoritma Oyunu</h1>
-      <section class="card controls">
+      <div class="controls">
         <label for="disks">Zorluk:</label>
         <select id="disks">
           <option value=4 selected>Kolay (4 Disk)</option>
@@ -183,8 +188,10 @@ select {
         <button id="newGameBtn" class="btn acc">🌀 Yeni Oyun</button>
         <div class="stat">Hamle: <b id="moves">0</b></div>
         <div class="stat">Min. Hamle: <b id="minMoves">15</b></div>
-      </section>
+      </div>
+    </section>
 
+    <div id="game-column">
       <section class="card game-area">
         <canvas id="canvas"></canvas>
       </section>
