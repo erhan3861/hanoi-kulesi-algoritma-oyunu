@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Modern Hanoi Kulesi Oyunu</title>
+<title>Hanoi Kulesi Algoritma Oyunu</title>
 <style>
 :root {
   --bg:#0b0f26;
@@ -22,30 +22,24 @@ html, body {
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
   background:radial-gradient(1200px 800px at 10% -10%, rgba(108,93,211,.18), transparent 30%), var(--bg);
   color:var(--ink);
-  display: grid;
-  place-items: center;
 }
 .wrap {
-  max-width:1100px;
-  width: 100%;
+  width: 95%;
+  max-width:1200px;
   margin:24px auto;
   padding:12px;
 }
-header {
+.main-board {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+#game-column h1 {
   text-align: center;
-  margin-bottom: 24px;
-}
-header h1 {
-  margin:0;
+  margin-top: 0;
+  margin-bottom: 20px;
   font-size:clamp(24px, 4vw, 38px);
-}
-header .sub {
-  color:var(--muted);
-  margin:8px 0 14px;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.5;
 }
 .card {
   background:linear-gradient(180deg, var(--panel), var(--panel2));
@@ -53,7 +47,15 @@ header .sub {
   border-radius:16px;
   box-shadow:0 12px 32px rgba(0,0,0,.35);
   padding: 20px;
-  margin-bottom: 20px;
+}
+.description-card h2 {
+  margin-top: 5px;
+  color: var(--gold);
+}
+.description-card p {
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 15px;
 }
 .controls {
   display: flex;
@@ -61,6 +63,7 @@ header .sub {
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
+  margin-bottom: 20px;
 }
 .btn {
   background:linear-gradient(180deg, #273074, #1a1f55);
@@ -93,7 +96,7 @@ select {
 }
 .game-area {
   text-align: center;
-  padding: 20px;
+  padding: 10px;
   overflow-x: auto;
 }
 #canvas {
@@ -142,34 +145,54 @@ select {
   padding: 12px;
   border-radius: 12px;
 }
+/* Responsive Design */
+@media (max-width: 960px) {
+  .main-board {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 </head>
 <body>
 
 <div class="wrap">
-  <header>
-    <h1>Modern Hanoi Kulesi</h1>
-    <div class="sub">
-      Tüm disk yığınını başka bir kuleye taşıyın. Unutmayın: Büyük bir disk asla küçük bir diskin üzerine gelemez. Kulelere tıklayarak veya 1, 2, 3 tuşlarını kullanarak oynayabilirsiniz.
+  <div class="main-board">
+    <section class="card description-card">
+      <h2>Açıklama & Kurallar</h2>
+      <p>
+        Hanoi Kuleleri, matematiksel bir bulmaca oyunudur. Amaç, soldaki kuleden başlayan tüm disk yığınını, kurallara uyarak en sağdaki kuleye taşımaktır.
+      </p>
+      <p><strong>Temel Kurallar:</strong></p>
+      <ol>
+        <li style="color: var(--muted); line-height: 1.6;">Her hamlede sadece bir disk taşıyabilirsiniz.</li>
+        <li style="color: var(--muted); line-height: 1.6;">Büyük bir disk, asla daha küçük bir diskin üzerine konulamaz.</li>
+        <li style="color: var(--muted); line-height: 1.6;">Diskleri taşımak için ortadaki yardımcı kuleyi kullanabilirsiniz.</li>
+      </ol>
+      <p>
+        Bulmacayı çözmek için gereken minimum hamle sayısı <strong>2<sup>n</sup> - 1</strong> formülü ile hesaplanır (n = disk sayısı).
+      </p>
+    </section>
+
+    <div id="game-column">
+      <h1>Hanoi Kulesi Algoritma Oyunu</h1>
+      <section class="card controls">
+        <label for="disks">Zorluk:</label>
+        <select id="disks">
+          <option value=4 selected>Kolay (4 Disk)</option>
+          <option value=5>Normal (5 Disk)</option>
+          <option value=6>Zor (6 Disk)</option>
+          <option value=7>Çok Zor (7 Disk)</option>
+        </select>
+        <button id="newGameBtn" class="btn acc">🌀 Yeni Oyun</button>
+        <div class="stat">Hamle: <b id="moves">0</b></div>
+        <div class="stat">Min. Hamle: <b id="minMoves">15</b></div>
+      </section>
+
+      <section class="card game-area">
+        <canvas id="canvas"></canvas>
+      </section>
     </div>
-  </header>
-
-  <section class="card controls">
-    <label for="disks">Zorluk:</label>
-    <select id="disks">
-      <option value=4>Kolay (4 Disk)</option>
-      <option value=5 selected>Normal (5 Disk)</option>
-      <option value=6>Zor (6 Disk)</option>
-      <option value=7>Çok Zor (7 Disk)</option>
-    </select>
-    <button id="newGameBtn" class="btn acc">🌀 Yeni Oyun</button>
-    <div class="stat">Hamle: <b id="moves">0</b></div>
-    <div class="stat">Min. Hamle: <b id="minMoves">31</b></div>
-  </section>
-
-  <section class="card game-area">
-    <canvas id="canvas"></canvas>
-  </section>
+  </div>
 </div>
 
 <div id="modal" class="modal" role="dialog" aria-modal="true">
@@ -197,7 +220,7 @@ var VIEW_ANGLE = 10;
 var RAISE_HEIGHT = DISK_THICKNESS * 1.5;
 var SPEED = 1.0;
 
-var totalDisks = 5;
+var totalDisks = 4;
 var pegX = [];
 var pegs = [[], [], []];
 var selectedDisk = undefined;
@@ -263,6 +286,7 @@ var lastTime;
 
 // Animation frame.
 function frame(timestamp) {
+  if(!ctx) return;
   var delta;
   if (lastTime === undefined) {
     delta = 0;
@@ -350,7 +374,11 @@ function input(n) {
   if (selectedDisk) {
     var topDisk = peg[peg.length - 1];
     if (topDisk && (topDisk.n < selectedDisk.n)) {
-      return; // Invalid move
+      // Invalid move, snap back the selected disk
+      selectedDisk.isRaised = false;
+      selectedDisk.setTarget();
+      selectedDisk = undefined;
+      return;
     }
 
     moves++;
@@ -379,13 +407,14 @@ function updateMoves() {
 }
 
 function checkWin() {
-  for (var i = 0; i < pegs.length; i++) {
-    if (lastCompletePeg !== i && pegs[i].length === totalDisks) {
+  for (var i = 1; i < pegs.length; i++) { // Check win on peg 1 or 2
+    if (pegs[i].length === totalDisks) {
       lastCompletePeg = i;
       setTimeout(function() {
         pwdEl.textContent = FIXED_PASSWORD;
         modal.classList.add('active');
       }, 500);
+      return; // Found a win, no need to check further
     }
   }
 }
